@@ -33,7 +33,7 @@ module ActiveAdmin
         env = { 'BUNDLE_GEMFILE' => ENV['BUNDLE_GEMFILE'] }
         env['INSTALL_PARALLEL'] = 'yes' if parallel
 
-        Bundler.with_original_env { Kernel.exec(env, command) }
+        Bundler.with_original_env { Kernel.system(env, command) }
 
         rails_app_rake "parallel:load_schema" if parallel
       end

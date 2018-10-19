@@ -1,7 +1,7 @@
 require_relative "application_generator"
 
 desc "Run the full suite using 1 core"
-task test: [:spec, :cucumber]
+task test: [:setup, :spec, :cucumber]
 
 desc 'Creates a test rails app for the specs to run against'
 task :setup, [:parallel, :dir, :template] do |_t, opts|

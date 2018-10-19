@@ -42,8 +42,7 @@ module ActiveAdmin
     private
 
     def rails_app_rake(task)
-      require 'rails/version'
-      system "cd spec/rails/rails-#{Rails::VERSION::STRING}; rake #{task}"
+      system "cd #{app_dir}; rake #{task}"
     end
 
     def app_dir

@@ -36,7 +36,7 @@ version: 2.1
 .run_tests: &run_tests
   run:
     name: Run tests
-    command: COVERAGE=true bundle exec rake
+    command: COVERAGE=true bundle exec rake parallel_tests
 
 .generate_docs: &generate_docs
   run:

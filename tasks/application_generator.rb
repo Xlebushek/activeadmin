@@ -9,10 +9,6 @@ module ActiveAdmin
     end
 
     def generate
-      require 'rails/version'
-
-      app_dir = "#{base_dir}/rails-#{Rails::VERSION::STRING}"
-
       unless !parallel || parallel_tests_setup?
         puts "parallel_tests is not set up. (Re)building #{app_dir} App. Please wait."
         system("rm -Rf #{app_dir}")
@@ -45,9 +41,15 @@ module ActiveAdmin
 
     private
 
+    def app_dir
+      @app_dir ||= begin
+                     require 'rails/version'
+                     "#{base_dir}/rails-#{Rails::VERSION::STRING}"
+                   end
+    end
+
     def parallel_tests_setup?
-      require 'rails/version'
-      database_config = File.join "spec", "rails", "rails-#{Rails::VERSION::STRING}", "config", "database.yml"
+      database_config = File.join app_dir, "config", "database.yml"
       File.exist?(database_config) && File.read(database_config).include?("TEST_ENV_NUMBER")
     end
   end

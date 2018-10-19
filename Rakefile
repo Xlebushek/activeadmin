@@ -7,6 +7,7 @@ task :setup, [:parallel, :dir, :template] do |_t, opts|
   base_dir = opts[:dir] || 'spec/rails'
   app_dir = "#{base_dir}/rails-#{Rails::VERSION::STRING}"
   template = opts[:template] || 'rails_template'
+  parallel = opts[:parallel]
 
   if File.exist? app_dir
     puts "test app #{app_dir} already exists; skipping"
@@ -25,11 +26,11 @@ task :setup, [:parallel, :dir, :template] do |_t, opts|
     command = ['bundle', 'exec', 'rails', 'new', app_dir, *args].join(' ')
 
     env = { 'BUNDLE_GEMFILE' => ENV['BUNDLE_GEMFILE'] }
-    env['INSTALL_PARALLEL'] = 'yes' if opts[:parallel]
+    env['INSTALL_PARALLEL'] = 'yes' if parallel
 
     Bundler.with_original_env { Kernel.exec(env, command) }
 
-    Rake::Task['parallel:after_setup_hook'].invoke if opts[:parallel]
+    Rake::Task['parallel:after_setup_hook'].invoke if parallel
   end
 end
 

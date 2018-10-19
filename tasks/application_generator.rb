@@ -9,8 +9,8 @@ module ActiveAdmin
     end
 
     def generate
-      unless !parallel || parallel_tests_setup?
-        puts "parallel_tests is not set up. (Re)building #{app_dir} App. Please wait."
+      unless correctly_configured_app?
+        puts "App is not correctly configured for running tests #{running_mode}. (Re)building #{app_dir} App. Please wait."
         system("rm -Rf #{app_dir}")
       end
 
@@ -40,6 +40,14 @@ module ActiveAdmin
     end
 
     private
+
+    def running_mode
+      parallel ? "in parallel" : "sequentially"
+    end
+
+    def correctly_configured_app?
+      !(parallel ^ parallel_tests_setup?)
+    end
 
     def rails_app_rake(task)
       Dir.chdir(app_dir) { system "rake #{task}" }

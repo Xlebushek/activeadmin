@@ -15,7 +15,6 @@ module ActiveAdmin
 
       unless !parallel || parallel_tests_setup?
         puts "parallel_tests is not set up. (Re)building spec/rails/rails-#{Rails::VERSION::STRING} App. Please wait."
-        require 'rails/version'
         system("rm -Rf spec/rails/rails-#{Rails::VERSION::STRING}")
       end
 

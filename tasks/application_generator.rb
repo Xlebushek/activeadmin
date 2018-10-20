@@ -30,7 +30,7 @@ module ActiveAdmin
 
         command = ['bundle', 'exec', 'rails', 'new', app_dir, *args].join(' ')
 
-        env = { 'BUNDLE_GEMFILE' => ENV['BUNDLE_GEMFILE'] }
+        env = base_env
         env['INSTALL_PARALLEL'] = 'yes' if parallel
 
         Bundler.with_original_env { Kernel.system(env, command) }
@@ -41,6 +41,10 @@ module ActiveAdmin
 
     private
 
+    def base_env
+      { 'BUNDLE_GEMFILE' => ENV['BUNDLE_GEMFILE'] }
+    end
+
     def running_mode
       parallel ? "in parallel" : "sequentially"
     end
@@ -50,7 +54,11 @@ module ActiveAdmin
     end
 
     def rails_app_rake(task)
-      Dir.chdir(app_dir) { system "rake #{task}" }
+      env = base_env
+
+      Bundler.with_original_env do
+        Dir.chdir(app_dir) { system(env, "bundle exec rake #{task}") }
+      end
     end
 
     def app_dir

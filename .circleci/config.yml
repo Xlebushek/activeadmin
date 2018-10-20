@@ -36,14 +36,14 @@ version: 2.1
 .restore_rspec_test_times: &restore_rspec_test_times
   restore_cache:
     keys:
-      - v1-testtime-rspec-{{ .Branch }}
-      - v1-testtime-rspec-master
+      - testtime-rspec-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}
+      - testtime-rspec-master-{{ .Environment.CIRCLE_JOB }}
 
 .restore_cucumber_test_times: &restore_cucumber_test_times
   restore_cache:
     keys:
-      - v1-testtime-cucumber-{{ .Branch }}
-      - v1-testtime-cucumber-master
+      - testtime-cucumber-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}
+      - testtime-cucumber-master-{{ .Environment.CIRCLE_JOB }}
 
 .run_tests: &run_tests
   run:
@@ -52,13 +52,13 @@ version: 2.1
 
 .save_rspec_test_times: &save_rspec_test_times
   save_cache:
-    key: v1-testtime-rspec-{{ .Branch }}
+    key: testtime-rspec-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}
     paths:
       - tmp/parallel_runtime_rspec.log
 
 .save_cucumber_test_times: &save_cucumber_test_times
   save_cache:
-    key: v1-testtime-cucumber-{{ .Branch }}
+    key: testtime-cucumber-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}
     paths:
       - tmp/parallel_runtime_cucumber.log
 

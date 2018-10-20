@@ -33,10 +33,34 @@ version: 2.1
     paths:
       - vendor/bundle
 
+.restore_rspec_test_times: &restore_rspec_test_times
+  restore_cache:
+    keys:
+      - testtime-rspec-{{ .Branch }}
+      - testtime-rspec-master
+
+.restore_cucumber_test_times: &restore_cucumber_test_times
+  restore_cache:
+    keys:
+      - testtime-cucumber-{{ .Branch }}
+      - testtime-cucumber-master
+
 .run_tests: &run_tests
   run:
     name: Run tests
     command: COVERAGE=true PARALLEL_TEST_PROCESSORS=4 bundle exec rake parallel_tests
+
+.save_rspec_test_times: &save_rspec_test_times
+  save_cache:
+    key: testtime-rspec-{{ .Branch }}
+    paths:
+      - tmp/parallel_runtime_rspec.log
+
+.save_cucumber_test_times: &save_cucumber_test_times
+  save_cache:
+    key: testtime-cucumber-{{ .Branch }}
+    paths:
+      - tmp/parallel_runtime_cucumber.log
 
 .generate_docs: &generate_docs
   run:
@@ -56,7 +80,11 @@ version: 2.1
   - *install_dependencies
   - *install_chromedriver
   - *save_cache
+  - *restore_rspec_test_times
+  - *restore_cucumber_test_times
   - *run_tests
+  - *save_rspec_test_times
+  - *save_cucumber_test_times
 
 jobs:
   lint_and_docs:
